@@ -23,6 +23,7 @@ class TelegramListener:
 
     async def handler(self, event):
         try:
+            logging.info("New message received!")
             message = event.raw_text
             signal = parse_signal_source_one(message) or parse_signal_source_two(message)
             if signal:
