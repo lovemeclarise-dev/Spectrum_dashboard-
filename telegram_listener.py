@@ -10,6 +10,8 @@ class TelegramListener:
         try:
             self.client = TelegramClient("session", config.TELEGRAM_API_ID, config.TELEGRAM_API_HASH)
             self.trade_executor = trade_executor
+            self.client.add_event_handler(self.handler_one, events.NewMessage(chats=int(config.TELEGRAM_CHANNEL_ONE)))
+            self.client.add_event_handler(self.handler_two, events.NewMessage(chats=int(config.TELEGRAM_CHANNEL_TWO)))
             logging.info("Telegram client initialized successfully!")
             print("Telegram client initialized successfully!")
         except Exception as e:
@@ -26,8 +28,7 @@ class TelegramListener:
             logging.error(f"Error starting Telegram client: {e}")
             print(f"Error starting Telegram client: {e}")
 
-    @self.client.on(events.NewMessage(chats=int(config.TELEGRAM_CHANNEL_ONE)))
-    async def handler_one(event):
+    async def handler_one(self, event):
         try:
             logging.info("New message received from channel one!")
             print("New message received from channel one!")
@@ -49,8 +50,7 @@ class TelegramListener:
             logging.error(f"Error handling message: {e}")
             print(f"Error handling message: {e}")
 
-    @self.client.on(events.NewMessage(chats=int(config.TELEGRAM_CHANNEL_TWO)))
-    async def handler_two(event):
+    async def handler_two(self, event):
         try:
             logging.info("New message received from channel two!")
             print("New message received from channel two!")
