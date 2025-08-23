@@ -7,12 +7,15 @@ import config
 app = create_dashboard_app()
 
 async def run():
-    trade_executor = TradeExecutor()
-    telegram_listener = TelegramListener(trade_executor)
-    await asyncio.gather(
-        telegram_listener.start(),
-        trade_executor.run(),
-    )
+    try:
+        trade_executor = TradeExecutor()
+        telegram_listener = TelegramListener(trade_executor)
+        await asyncio.gather(
+            telegram_listener.start(),
+            trade_executor.run(),
+        )
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 @app.on_event("startup")
 async def startup_event():
