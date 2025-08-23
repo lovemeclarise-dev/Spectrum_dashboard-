@@ -5,3 +5,4 @@ telethon
 python-dotenv
 pocketoptionapi-async
 python-multipart
+termcolor
