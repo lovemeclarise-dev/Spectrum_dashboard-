@@ -10,17 +10,22 @@ class TelegramListener:
         try:
             self.client = TelegramClient("session", config.TELEGRAM_API_ID, config.TELEGRAM_API_HASH)
             self.trade_executor = trade_executor
-            self.client.add_event_handler(self.handler_one, events.NewMessage(chats=int(config.TELEGRAM_CHANNEL_ONE)))
-            self.client.add_event_handler(self.handler_two, events.NewMessage(chats=int(config.TELEGRAM_CHANNEL_TWO)))
             logging.info("Telegram client initialized successfully!")
             print("Telegram client initialized successfully!")
         except Exception as e:
             logging.error(f"Error initializing Telegram client: {e}")
             print(f"Error initializing Telegram client: {e}")
 
+    def start_listening(self):
+        self.client.add_event_handler(self.handler_one, events.NewMessage(chats=int(config.TELEGRAM_CHANNEL_ONE)))
+        self.client.add_event_handler(self.handler_two, events.NewMessage(chats=int(config.TELEGRAM_CHANNEL_TWO)))
+
     async def start(self):
         try:
             await self.client.start()
+            self.start_listening()
+            logging.info(f"Listening to channels {config.TELEGRAM_CHANNEL_ONE} and {config.TELEGRAM_CHANNEL_TWO}...")
+            print(f"Listening to channels {config.TELEGRAM_CHANNEL_ONE} and {config.TELEGRAM_CHANNEL_TWO}...")
             logging.info("Telegram client started successfully!")
             print("Telegram client started successfully!")
             await self.client.run_until_disconnected()
